@@ -13,7 +13,7 @@
 
     <div class="card">
         <h5 class="card-header">Table Basic</h5>
-        <div class="table-responsive text-nowrap">
+        <div class="table-responsive text-nowrap" style="overflow-x: inherit;!important;">
             <table class="table">
                 <thead>
                 <tr>
@@ -22,6 +22,7 @@
                     <th>Nom</th>
                     <th>Prenom</th>
                     <th>Date Naissance</th>
+                    <th>Enabled</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -30,24 +31,30 @@
                     <tr>
                         <td><i class="fab fa-vuejs fa-lg text-success me-3"></i> <strong>{{ user.id }}</strong></td>
 
-                        <td>{{ user.Email }} </td>
+                        <td>{{ user.email }} </td>
                         <td>{{ user.nom }} </td>
                         <td>{{ user.Prenom }} </td>
                         <td>{{ user.dateNaiss | date('d-m-Y') }} </td>
                         <td>
-                            <div class="dropdown">
-                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow show"
-                                        data-bs-toggle="dropdown" aria-expanded="true">
-                                    <i class="bx bx-dots-vertical-rounded"></i>
-                                </button>
-                                <div class="dropdown-menu show" data-popper-placement="bottom-start"
-                                     style="position: absolute; inset: 0 auto auto 0; margin: 0; transform: translate(0px, 27px);">
-                                    <a class="dropdown-item" href="{{ path('modifUser',{'id':user.id}) }}"><i
-                                                class="bx bx-edit-alt me-1"></i>Modifier</a>
-                                    <a class="dropdown-item" href="{{ path('supp_User',{'id':user.id}) }}"><i
-                                                class="bx bx-trash me-1"></i> Supprimer</a>
-                                </div>
+                            <a href="{{ path('app_admin_banuser',{'id':user.id}) }}">
+
+                            {% if user.enabled %}
+                                <span class="badge bg-label-success me-1">Active</span>
+                            {% else %}
+                                <span class="badge bg-label-secondary">Inactive</span>
+                            {% endif %}
+                            </a>
+                        </td>
+                        <td>
+                            <div class="d-inline-block text-nowrap">
+                                <button class="btn btn-sm btn-icon"><a href="{{ path('modifUser',{'id':user.id}) }}"><i
+                                                class="bx bx-edit"></i></a></button>
+                                <button class="btn btn-sm btn-icon delete-record"><a
+                                            href="{{ path('supp_User',{'id':user.id}) }}"><i
+                                                class="bx bx-trash"></i></a></button>
+
                             </div>
+
                         </td>
                     </tr>
                 {% endfor %}

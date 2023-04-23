@@ -56,6 +56,7 @@ class AdminController extends AbstractController
             $password = $password_encoder->hashPassword($user,
                 $request->request->get('user')['password']['first']);
             $user->setPassword($password);
+            $user->setEnabled(true);
             $em->persist($user); //add
             $em->flush();
             return $this->redirectToRoute("app_user");
@@ -121,6 +122,15 @@ class AdminController extends AbstractController
         ]);
     }
 
+    #[Route('/ban/{id}', name: 'app_admin_banuser')]
+    public function banUser(int $id,UserRepository $r){
+        $user = $r->find($id);
+        if ($user != null ){
+            $user->setEnabled(!$user->isEnabled());
+            $this->em->flush();
+        }
+        return $this->redirectToRoute("app_user");
+    }
 
     #[Route('/detailUsr/{id}/{email}/{name}', name: 'app_detailUsr')]
     public function detailFormation($id, $email, $name): Response
@@ -143,7 +153,7 @@ class AdminController extends AbstractController
             return $this->redirectToRoute("profilAD");
         }
         return $this->render('admin/profilAD.html.twig', [
-            'f' => $form->createView(),
+            'form' => $form->createView(),
         ]);
     }
 

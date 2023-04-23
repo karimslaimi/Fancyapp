@@ -69,6 +69,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private DateTime $dateNaiss;
 
+    /**
+     * @ORM\Column(name="enabled", type="boolean", options={"default":"1"})
+     */
+    private bool $enabled;
+
 
     public function getId(): ?int
     {
@@ -203,4 +208,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return (string) $this->email;
     }
+
+    /**
+     * @return bool
+     */
+    public function isEnabled(): bool
+    {
+        return $this->enabled;
+    }
+
+    /**
+     * @param bool $enabled
+     */
+    public function setEnabled(bool $enabled): void
+    {
+        $this->enabled = $enabled;
+    }
+
+
 }

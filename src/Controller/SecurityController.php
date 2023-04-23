@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
@@ -36,5 +37,52 @@ class SecurityController extends AbstractController
     public function logout()
     {
         return $this->redirectToRoute('app_login');
+    }
+
+    #[Route(path: '/forgot-password', name: 'forgot_password')]
+
+    public function forgotPassword(Request $request, \Swift_Mailer $mailer)
+    {
+        $form = $this->createForm(ForgotPasswordType::class);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $email = $form->get('email')->getData();
+
+            $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['email' => $email]);
+
+            if ($user) {
+                $token = md5(uniqid());
+                $user->setResetPasswordToken($token);
+
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($user);
+                $entityManager->flush();
+
+                $message = (new \Swift_Message('Reset your password'))
+                    ->setFrom('noreply@example.com')
+                    ->setTo($email)
+                    ->setBody(
+                        $this->renderView(
+                            'emails/reset_password.html.twig',
+                            ['token' => $token]
+                        ),
+                        'text/html'
+                    );
+
+                $mailer->send($message);
+
+                $this->addFlash('success', 'Check your email for a reset password link.');
+
+                return $this->redirectToRoute('forgot_password');
+            } else {
+                $this->addFlash('error', 'Invalid email address.');
+            }
+        }
+
+        return $this->render('forgot_password.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 }

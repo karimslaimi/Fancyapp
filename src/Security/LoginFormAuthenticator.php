@@ -2,11 +2,14 @@
 
 namespace App\Security;
 
+use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Exception\DisabledException;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Authenticator\AbstractLoginFormAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\CsrfTokenBadge;
@@ -22,15 +25,23 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
     public const LOGIN_ROUTE = 'app_login';
 
     private UrlGeneratorInterface $urlGenerator;
+    private UserRepository $userRepository;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(UrlGeneratorInterface $urlGenerator, UserRepository $repository)
     {
         $this->urlGenerator = $urlGenerator;
+        $this->userRepository = $repository;
     }
 
     public function authenticate(Request $request): Passport
     {
         $username = $request->request->get('email', '');
+        $user = $this->userRepository->findOneBy(["email"=>$username]);
+        if ($user != null && !$user->isEnabled()){
+            $request->getSession()->getFlashBag()->add('error', "User account is disabled.");
+
+            throw new DisabledException('User account is disabled.');
+        }
 
         $request->getSession()->set(Security::LAST_USERNAME, $username);
 
@@ -61,4 +72,19 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
     {
         return $this->urlGenerator->generate(self::LOGIN_ROUTE);
     }
+
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): Response
+    {
+        if ($exception->getPrevious() != null && $exception->getPrevious()->getMessage()=="User account is disabled."){
+            $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception->getPrevious());
+        }else if ($request->hasSession()) {
+            $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);
+        }
+
+        $url = $this->getLoginUrl($request);
+
+        return new RedirectResponse($url);
+    }
+
+
 }
