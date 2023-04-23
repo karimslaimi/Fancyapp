@@ -1,0 +1,50 @@
+
+
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+
+
+
+<div class="card">
+  <a href={{ path('app_blog') }}> <button type="button" class="btn btn-outline-dark">Retour</button>
+
+  
+  
+  <div class="table-responsive text-nowrap">
+  <h5 class="card-header">Information de l'utilisateur {{ n }}</h5>
+    <table class="table table-dark">
+       <tr>
+            <th>id</th>
+            <th>Email</th>
+            <th>Name</th>
+            
+           
+
+
+        </tr>
+      </thead>
+      
+      <tbody class="table-border-bottom-0">
+        
+ 
+ <tr>
+ <td>{{ i }} </td>
+ <td>{{ e }} </td>
+ <td>{{ n }} </td>    
+ </tr>
+ 
+ </tbody>
+
+ </div>
+ 
+ 
+{% endblock %}
+
+
+
+      
+
+
+

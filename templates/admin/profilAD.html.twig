@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+
+
+<div class="col-md-12">
+
+    <h1> PROFIL </h1>
+
+
+
+    </ul>
+    <div class="card mb-4">
+      <h5 class="card-header">Profile Details</h5>
+      <!-- Account -->
+      
+      <hr class="my-0">
+      <div class="card-body">
+        
+          {{ form_start(f,{attr:{novalidate:'novalidate'}}) }}
+          <div class="row">
+
+
+            <div class="mb-3 col-md-6">
+              <label for="email" class="form-label">Name</label>
+              
+              {{ form_widget(f.name,{attr:{'class':'form-control'}}) }}
+            </div>
+
+            <div class="mb-3 col-md-6">
+              <label for="email" class="form-label">Email</label>
+              {{form_widget(f._token)}}
+              {{ form_widget(f.email,{attr:{'class':'form-control'}}) }}
+            </div>
+            
+            <label class="col-sm-2 col-form-label" for="basic-default-name">Password</label>
+            <div class="col-sm-10">
+              {{ form_widget(f.password.first,{attr:{'class':'form-control'}}) }}
+              {{ form_errors(f.password.first,{attr:{'class':'text-danger'}}) }}
+            </div>
+            
+            
+            
+            <div class="row mb-6">
+            <label class="col-sm-2 col-form-label" for="basic-default-name">Confirm Password</label>
+            <div class="col-sm-10">
+              {{ form_widget(f.password.second,{attr:{'class':'form-control'}}) }}
+            </div>
+                
+          </div>
+            
+
+        </form>
+      </div>
+      <!-- /Account -->
+    </div>
+    
+    {{ form_end(f) }}
+
+
+  {% endblock %}

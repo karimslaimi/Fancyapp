@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal" created-in="PS-231.8109.199">
+    <data-source name="fancytrade@localhost" uuid="186747d9-bdb6-44d5-a01d-6f3448af7cf2">
+      <database-info product="MySQL" version="5.7.40" jdbc-version="4.2" driver-name="MariaDB Connector/J" driver-version="3.0.7" dbms="MYSQL" exact-version="5.7.40" exact-driver-version="3.0">
+        <extra-name-characters>#@</extra-name-characters>
+        <identifier-quote-string>`</identifier-quote-string>
+      </database-info>
+      <case-sensitivity plain-identifiers="lower" quoted-identifiers="lower" />
+      <secret-storage>master_key</secret-storage>
+      <user-name>root</user-name>
+      <schema-mapping>
+        <introspection-scope>
+          <node kind="schema" negative="1" />
+        </introspection-scope>
+      </schema-mapping>
+    </data-source>
+  </component>
+</project>

@@ -1,0 +1,60 @@
+{% extends 'template.html.twig' %}
+
+
+{% block body %}
+
+    <ul class="nav nav-pills flex-column flex-md-row mb-3">
+
+        <li class="nav-item">
+            <a class="nav-link active" href="{{ path('app_User') }}"><i class="bx bx-link-alt me-1"></i> Ajouter un
+                utilisateur</a>
+        </li>
+    </ul>
+
+    <div class="card">
+        <h5 class="card-header">Table Basic</h5>
+        <div class="table-responsive text-nowrap">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>id</th>
+                    <th>Email</th>
+                    <th>Nom</th>
+                    <th>Prenom</th>
+                    <th>Date Naissance</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                {% for user in u %}
+                    <tr>
+                        <td><i class="fab fa-vuejs fa-lg text-success me-3"></i> <strong>{{ user.id }}</strong></td>
+
+                        <td>{{ user.Email }} </td>
+                        <td>{{ user.nom }} </td>
+                        <td>{{ user.Prenom }} </td>
+                        <td>{{ user.dateNaiss | date('d-m-Y') }} </td>
+                        <td>
+                            <div class="dropdown">
+                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow show"
+                                        data-bs-toggle="dropdown" aria-expanded="true">
+                                    <i class="bx bx-dots-vertical-rounded"></i>
+                                </button>
+                                <div class="dropdown-menu show" data-popper-placement="bottom-start"
+                                     style="position: absolute; inset: 0 auto auto 0; margin: 0; transform: translate(0px, 27px);">
+                                    <a class="dropdown-item" href="{{ path('modifUser',{'id':user.id}) }}"><i
+                                                class="bx bx-edit-alt me-1"></i>Modifier</a>
+                                    <a class="dropdown-item" href="{{ path('supp_User',{'id':user.id}) }}"><i
+                                                class="bx bx-trash me-1"></i> Supprimer</a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+{% endblock %}
