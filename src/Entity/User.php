@@ -74,6 +74,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private bool $enabled;
 
+    /**
+     * @ORM\Column(name="token", type="string", nullable="true")
+     */
+    private ?string $token;
+
 
     public function getId(): ?int
     {
@@ -223,6 +228,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEnabled(bool $enabled): void
     {
         $this->enabled = $enabled;
+    }
+
+    /**
+     * @return string
+     */
+    public function getToken(): string
+    {
+        return $this->token;
+    }
+
+    /**
+     * @param string $token
+     */
+    public function setToken(?string $token): void
+    {
+        $this->token = $token;
     }
 
 
